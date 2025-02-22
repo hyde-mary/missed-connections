@@ -21,7 +21,7 @@ import { SignInButton } from "@clerk/nextjs";
 import { useSignUp } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 
-const RegisterForm = () => {
+const SignUpForm = () => {
   const { isLoaded, signUp, setActive } = useSignUp();
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
@@ -343,4 +343,4 @@ const RegisterForm = () => {
   );
 };
 
-export default RegisterForm;
+export default SignUpForm;

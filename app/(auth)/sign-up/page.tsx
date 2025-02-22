@@ -1,5 +1,5 @@
 import React from "react";
-import RegisterForm from "../_Components/registerForm";
+import SignUpForm from "../_Components/sign-up-form";
 
 const Page = () => {
   return (
@@ -20,7 +20,7 @@ const Page = () => {
 
       {/* Right Login Form */}
       <div className="w-full md:w-1/2 flex items-center justify-center p-8 bg-gray-50">
-        <RegisterForm />
+        <SignUpForm />
       </div>
     </div>
   );
