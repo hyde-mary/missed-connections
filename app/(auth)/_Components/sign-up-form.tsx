@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { registerSchema } from "@/lib/schemas/authSchema";
+import { signUpSchema, verifySchema } from "@/lib/schemas/authSchema";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -16,7 +16,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Eye, EyeOff } from "lucide-react";
+import { ArrowLeftCircle, Eye, EyeOff } from "lucide-react";
 import { SignInButton } from "@clerk/nextjs";
 import { useSignUp } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
@@ -31,8 +31,8 @@ const SignUpForm = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const form = useForm<z.infer<typeof registerSchema>>({
-    resolver: zodResolver(registerSchema),
+  const signInForm = useForm<z.infer<typeof signUpSchema>>({
+    resolver: zodResolver(signUpSchema),
     defaultValues: {
       username: "",
       email: "",
@@ -42,7 +42,14 @@ const SignUpForm = () => {
     },
   });
 
-  const onSubmit = async (values: z.infer<typeof registerSchema>) => {
+  const verifyForm = useForm<z.infer<typeof verifySchema>>({
+    resolver: zodResolver(verifySchema),
+    defaultValues: {
+      code: "",
+    },
+  });
+
+  const onSubmit = async (values: z.infer<typeof signUpSchema>) => {
     if (!isLoaded) return;
 
     setLoading(true);
@@ -68,14 +75,12 @@ const SignUpForm = () => {
     }
   };
 
-  const handleVerify = async (e: React.FormEvent) => {
-    e.preventDefault();
-
+  const handleVerifySubmit = async (values: z.infer<typeof verifySchema>) => {
     if (!isLoaded) return;
 
     try {
       const completeSignUp = await signUp.attemptEmailAddressVerification({
-        code,
+        code: values.code,
       });
 
       if (completeSignUp.status === "complete") {
@@ -114,51 +119,55 @@ const SignUpForm = () => {
           </p>
         </div>
 
-        <form onSubmit={handleVerify} className="space-y-6">
-          <div className="space-y-2">
-            <label
-              htmlFor="code"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Verification Code
-            </label>
-            <input
-              value={code}
-              id="code"
-              name="code"
-              onChange={(e) => setCode(e.target.value)}
-              placeholder="Enter 6-digit code"
-              className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition-all"
-            />
-          </div>
-
-          <button
-            type="submit"
-            className="w-full bg-purple-600 text-white py-3 px-4 rounded-lg hover:bg-purple-700 transition-colors duration-200 font-medium disabled:opacity-50"
+        <Form {...verifyForm}>
+          <form
+            onSubmit={verifyForm.handleSubmit(handleVerifySubmit)}
+            className="space-y-6"
           >
-            Verify Email
+            <FormField
+              control={verifyForm.control}
+              name="code"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-lg">Code</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Enter 6-digit code" {...field} />
+                  </FormControl>
+                  <FormDescription>
+                    Enter the 6 digit Code we sent to your email.
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <Button
+              type="submit"
+              className="w-full bg-purple-600 text-white py-2 px-4 rounded-lg hover:bg-purple-700 transition duration-200"
+            >
+              Verify Email
+            </Button>
+            {error && (
+              <p className="text-red-500 text-sm text-center">{error}</p>
+            )}
+          </form>
+        </Form>
+
+        <div className="flex items-center justify-between">
+          <button
+            onClick={() => {
+              setLoading(false);
+              setVerifying(false);
+            }}
+            className="flex items-center space-x-2 text-gray-700 hover:text-gray-900 transition duration-200"
+          >
+            <ArrowLeftCircle className="h-4 w-4" />
+            <p className="text-sm">Go back to Registration Form</p>
           </button>
-
-          {error && <p className="text-red-500 text-sm text-center">{error}</p>}
-        </form>
-
-        <div className="text-center text-sm text-gray-600">
-          Didn&apos;t receive the code?{" "}
           <button
             onClick={handleResend}
-            className="text-purple-600 hover:text-purple-700 font-medium"
-            disabled={loading}
+            className="flex items-center space-x-2 text-gray-700 hover:text-gray-900 transition duration-200"
           >
-            Resend Code
-          </button>
-        </div>
-
-        <div className="text-center">
-          <button
-            onClick={() => setVerifying(false)}
-            className="text-gray-600 hover:text-gray-800 text-sm font-medium"
-          >
-            ← Back to registration
+            <p className="text-sm">Resend Code</p>
           </button>
         </div>
       </div>
@@ -178,11 +187,14 @@ const SignUpForm = () => {
 
       {error && <p className="text-red-500 text-sm text-center">{error}</p>}
 
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+      <Form {...signInForm}>
+        <form
+          onSubmit={signInForm.handleSubmit(onSubmit)}
+          className="space-y-6"
+        >
           {/* Username */}
           <FormField
-            control={form.control}
+            control={signInForm.control}
             name="username"
             render={({ field }) => (
               <FormItem>
@@ -200,7 +212,7 @@ const SignUpForm = () => {
 
           {/* Email */}
           <FormField
-            control={form.control}
+            control={signInForm.control}
             name="email"
             render={({ field }) => (
               <FormItem>
@@ -219,7 +231,7 @@ const SignUpForm = () => {
 
           {/* Password */}
           <FormField
-            control={form.control}
+            control={signInForm.control}
             name="password"
             render={({ field }) => (
               <FormItem>
@@ -252,7 +264,7 @@ const SignUpForm = () => {
 
           {/* Confirm Password */}
           <FormField
-            control={form.control}
+            control={signInForm.control}
             name="confirmPassword"
             render={({ field }) => (
               <FormItem>
@@ -287,7 +299,7 @@ const SignUpForm = () => {
 
           {/* Terms Agreement */}
           <FormField
-            control={form.control}
+            control={signInForm.control}
             name="terms"
             render={({ field }) => (
               <FormItem>

@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const loginSchema = z.object({
+export const signInSchema = z.object({
   identifier: z
     .string()
     .min(1, "Required")
@@ -22,7 +22,7 @@ export const loginSchema = z.object({
   password: z.string().min(8, "Password must be at least 8 characters"),
 });
 
-export const registerSchema = z
+export const signUpSchema = z
   .object({
     username: z
       .string()
@@ -49,3 +49,11 @@ export const registerSchema = z
     message: "Passwords do not match",
     path: ["confirmPassword"],
   });
+
+export const verifySchema = z.object({
+  code: z
+    .string()
+    .min(6, "Code must be 6 digits")
+    .max(6, "Code must be 6 digits")
+    .regex(/^\d+$/, "Code must contain only numbers"),
+});

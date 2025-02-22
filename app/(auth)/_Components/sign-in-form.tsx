@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { loginSchema } from "@/lib/schemas/authSchema";
+import { signInSchema } from "@/lib/schemas/authSchema";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -26,15 +26,15 @@ const SignInForm = () => {
   const { signIn, isLoaded, setActive } = useSignIn();
   const router = useRouter();
 
-  const form = useForm<z.infer<typeof loginSchema>>({
-    resolver: zodResolver(loginSchema),
+  const form = useForm<z.infer<typeof signInSchema>>({
+    resolver: zodResolver(signInSchema),
     defaultValues: {
       identifier: "",
       password: "",
     },
   });
 
-  const onSubmit = async (values: z.infer<typeof loginSchema>) => {
+  const onSubmit = async (values: z.infer<typeof signInSchema>) => {
     if (!isLoaded) return;
 
     try {
