@@ -3,7 +3,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { ArrowRightCircle } from "lucide-react";
-import { redirect } from "next/navigation";
+import { SignInButton } from "@clerk/nextjs";
 
 const Page = () => {
   const fadeInUp = {
@@ -62,15 +62,12 @@ const Page = () => {
           transition={{ duration: 0.6, delay: 0.4 }}
           className="flex justify-center gap-4 mt-8"
         >
-          <Button
-            className="bg-[#6b45ea] text-lg p-5 group hover:bg-[#5938d3] transition-colors"
-            onClick={() => {
-              redirect("/login");
-            }}
-          >
-            Start Searching
-            <ArrowRightCircle className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-          </Button>
+          <SignInButton>
+            <Button className="bg-[#6b45ea] text-lg p-5 group hover:bg-[#5938d3] transition-colors">
+              Start Searching
+              <ArrowRightCircle className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+            </Button>
+          </SignInButton>
         </motion.div>
       </div>
     </section>
