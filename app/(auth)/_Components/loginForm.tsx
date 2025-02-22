@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Eye, EyeOff, LogInIcon } from "lucide-react";
+import { SignUpButton } from "@clerk/nextjs";
 
 const LoginForm = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -143,8 +144,8 @@ const LoginForm = () => {
 
       <div className="text-center text-sm text-gray-600">
         Don&apos;t have an account?{" "}
-        <a href="#" className="text-purple-600 hover:text-purple-700">
-          Sign up
+        <a className="text-purple-600 hover:text-purple-700">
+          <SignUpButton>Sign up</SignUpButton>
         </a>
       </div>
     </div>
