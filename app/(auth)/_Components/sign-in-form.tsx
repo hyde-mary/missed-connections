@@ -4,6 +4,8 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signInSchema } from "@/lib/schemas/authSchema";
+import { useSignIn } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -17,9 +19,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Eye, EyeOff, LogInIcon } from "lucide-react";
 import { SignUpButton } from "@clerk/nextjs";
-
-import { useSignIn } from "@clerk/nextjs";
-import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 const SignInForm = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -44,12 +44,12 @@ const SignInForm = () => {
       });
 
       if (result.status === "complete") {
+        toast.success("Sign In Successful!");
         await setActive({ session: signIn.createdSessionId });
         router.replace("/");
       }
-    } catch (error: any) {
-      console.error("Sign-in failed:", error.errors);
-      alert(error.errors[0]?.longMessage || "Sign-in failed");
+    } catch {
+      toast.error("Sign In Failed! Check your Credentials");
     }
   };
 

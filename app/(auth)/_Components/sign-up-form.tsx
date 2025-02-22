@@ -4,6 +4,9 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signUpSchema, verifySchema } from "@/lib/schemas/authSchema";
+import { SignInButton } from "@clerk/nextjs";
+import { useSignUp } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -17,9 +20,8 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { ArrowLeftCircle, Eye, EyeOff } from "lucide-react";
-import { SignInButton } from "@clerk/nextjs";
-import { useSignUp } from "@clerk/nextjs";
-import { useRouter } from "next/navigation";
+
+import { toast } from "sonner";
 
 const SignUpForm = () => {
   const { isLoaded, signUp, setActive } = useSignUp();
@@ -66,11 +68,11 @@ const SignUpForm = () => {
         strategy: "email_code",
       });
 
+      toast.success("Verification Code Sent to your Email.");
+
       setVerifying(true);
-    } catch (err: any) {
-      setError(
-        err.errors?.[0]?.message || "An error occurred during registration"
-      );
+    } catch {
+      toast.error("An Error Occurred during Registration");
     }
   };
 
@@ -83,13 +85,16 @@ const SignUpForm = () => {
       });
 
       if (completeSignUp.status === "complete") {
+        toast.success("Code Successfully Verified!");
         await setActive({ session: completeSignUp.createdSessionId });
         router.push("/");
       } else {
-        console.error(JSON.stringify(completeSignUp, null, 2));
+        toast.error("Incorrect Verification Code");
       }
-    } catch (err: any) {
-      console.error("Error:", JSON.stringify(err, null, 2));
+    } catch {
+      toast.error(
+        "An Error Occured during Verification. Please Try Again Later"
+      );
     }
   };
 
@@ -99,9 +104,9 @@ const SignUpForm = () => {
       await signUp.prepareEmailAddressVerification({
         strategy: "email_code",
       });
-    } catch (err: any) {
-      setError(
-        err.errors?.[0]?.message || "An error occurred during registration"
+    } catch {
+      toast.error(
+        "An Error Occurred in Sending the Verificaiton Code. Please Try Again Later"
       );
     }
   };
