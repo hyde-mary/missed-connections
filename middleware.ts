@@ -9,20 +9,22 @@ const isPublicRoute = createRouteMatcher([
 
 export default clerkMiddleware(async (auth, request) => {
   const { userId } = await auth();
+  const url = new URL(request.nextUrl);
 
-  // if route is public, allow access
+  if (userId && isPublicRoute(request)) {
+    return NextResponse.redirect(new URL("/", url.origin));
+  }
+
   if (isPublicRoute(request)) {
     return NextResponse.next();
   }
 
-  // if user is not authenticated, redirect to landing
   if (!userId) {
-    const signInUrl = new URL("/landing", request.nextUrl.origin);
-    signInUrl.searchParams.set("redirect", request.nextUrl.pathname);
+    const signInUrl = new URL("/landing", url.origin);
+    signInUrl.searchParams.set("redirect", url.pathname);
     return NextResponse.redirect(signInUrl);
   }
 
-  // if authenticated, proceed
   return NextResponse.next();
 });
 

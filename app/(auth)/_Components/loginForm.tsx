@@ -18,9 +18,13 @@ import { Input } from "@/components/ui/input";
 import { Eye, EyeOff, LogInIcon } from "lucide-react";
 import { SignUpButton } from "@clerk/nextjs";
 
+import { useSignIn } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
+
 const LoginForm = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const [loginMethod, setLoginMethod] = useState<"email" | "username">("email");
+  const { signIn, isLoaded, setActive } = useSignIn();
+  const router = useRouter();
 
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
@@ -30,9 +34,26 @@ const LoginForm = () => {
     },
   });
 
-  const onSubmit = (values: z.infer<typeof loginSchema>) => {
-    console.log(values);
+  const onSubmit = async (values: z.infer<typeof loginSchema>) => {
+    if (!isLoaded) return;
+
+    try {
+      const result = await signIn.create({
+        identifier: values.identifier,
+        password: values.password,
+      });
+
+      if (result.status === "complete") {
+        await setActive({ session: signIn.createdSessionId });
+        router.replace("/");
+      }
+    } catch (error: any) {
+      console.error("Sign-in failed:", error.errors);
+      alert(error.errors[0]?.longMessage || "Sign-in failed");
+    }
   };
+
+  if (!isLoaded) return null;
 
   return (
     <div className="w-full max-w-md space-y-6">
@@ -44,31 +65,6 @@ const LoginForm = () => {
         </p>
       </div>
 
-      <div className="flex gap-2">
-        <Button
-          onClick={() => setLoginMethod("email")}
-          type="button"
-          className={`w-full ${
-            loginMethod === "email"
-              ? "bg-[#4f70f3] text-white hover:bg-[#5769f2]"
-              : "bg-gray-200 text-gray-900 hover:bg-gray-300"
-          }`}
-        >
-          Email
-        </Button>
-        <Button
-          onClick={() => setLoginMethod("username")}
-          type="button"
-          className={`w-full ${
-            loginMethod === "username"
-              ? "bg-[#4f70f3] text-white hover:bg-[#5769f2]"
-              : "bg-gray-200 text-gray-900 hover:bg-gray-300"
-          }`}
-        >
-          Username
-        </Button>
-      </div>
-
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
           {/* Identifier Field */}
@@ -77,18 +73,9 @@ const LoginForm = () => {
             name="identifier"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-lg">
-                  {loginMethod === "email" ? "Email" : "Username"}
-                </FormLabel>
+                <FormLabel className="text-lg">Email / Username</FormLabel>
                 <FormControl>
-                  <Input
-                    placeholder={
-                      loginMethod === "email"
-                        ? "missed@connections.com"
-                        : "missed_connections"
-                    }
-                    {...field}
-                  />
+                  <Input placeholder="missed@connections.com" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
