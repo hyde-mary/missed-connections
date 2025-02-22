@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowRightCircle } from "lucide-react";
 import { redirect } from "next/navigation";
 
-const LandingHeroSection = () => {
+const Page = () => {
   const fadeInUp = {
     hidden: { opacity: 0, y: 20 },
     visible: { opacity: 1, y: 0 },
@@ -77,4 +77,4 @@ const LandingHeroSection = () => {
   );
 };
 
-export default LandingHeroSection;
+export default Page;
