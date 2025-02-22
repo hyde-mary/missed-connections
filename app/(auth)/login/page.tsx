@@ -1,7 +1,7 @@
 import React from "react";
 import LoginForm from "../_Components/loginForm";
 
-const LoginPage = () => {
+const Page = () => {
   return (
     <div className="min-h-screen flex flex-col md:flex-row">
       {/* Left Side */}
@@ -27,4 +27,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default Page;
