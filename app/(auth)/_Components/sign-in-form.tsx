@@ -21,7 +21,7 @@ import { SignUpButton } from "@clerk/nextjs";
 import { useSignIn } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 
-const LoginForm = () => {
+const SignInForm = () => {
   const [showPassword, setShowPassword] = useState(false);
   const { signIn, isLoaded, setActive } = useSignIn();
   const router = useRouter();
@@ -139,4 +139,4 @@ const LoginForm = () => {
   );
 };
 
-export default LoginForm;
+export default SignInForm;

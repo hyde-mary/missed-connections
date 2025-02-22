@@ -1,5 +1,5 @@
 import React from "react";
-import LoginForm from "../_Components/loginForm";
+import SignInForm from "../_Components/sign-in-form";
 
 const Page = () => {
   return (
@@ -21,7 +21,7 @@ const Page = () => {
 
       {/* Right Login Form */}
       <div className="w-full md:w-1/2 flex items-center justify-center p-8 bg-gray-50">
-        <LoginForm />
+        <SignInForm />
       </div>
     </div>
   );
