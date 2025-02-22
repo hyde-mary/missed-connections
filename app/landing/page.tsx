@@ -4,8 +4,13 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { ArrowRightCircle } from "lucide-react";
 import { SignInButton } from "@clerk/nextjs";
+import { useUser } from "@clerk/nextjs";
 
 const Page = () => {
+  const { isSignedIn } = useUser();
+
+  console.log(isSignedIn);
+
   const fadeInUp = {
     hidden: { opacity: 0, y: 20 },
     visible: { opacity: 1, y: 0 },
