@@ -8,18 +8,27 @@ const isPublicRoute = createRouteMatcher([
 ]);
 
 export default clerkMiddleware(async (auth, request) => {
-  if (!isPublicRoute(request)) {
-    const url = request.nextUrl.clone();
-    url.pathname = "/landing";
-    return NextResponse.rewrite(url);
+  const { userId } = await auth();
+
+  // if route is public, allow access
+  if (isPublicRoute(request)) {
+    return NextResponse.next();
   }
+
+  // if user is not authenticated, redirect to landing
+  if (!userId) {
+    const signInUrl = new URL("/landing", request.nextUrl.origin);
+    signInUrl.searchParams.set("redirect", request.nextUrl.pathname);
+    return NextResponse.redirect(signInUrl);
+  }
+
+  // if authenticated, proceed
+  return NextResponse.next();
 });
 
 export const config = {
   matcher: [
-    // Skip Next.js internals and all static files, unless found in search params
     "/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)",
-    // Always run for API routes
     "/(api|trpc)(.*)",
   ],
 };
