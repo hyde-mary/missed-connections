@@ -1,9 +1,9 @@
-import { SignOutButton } from "@clerk/nextjs";
+import Navbar from "./_Components/navbar";
 
 export default function Page() {
   return (
-    <div>
-      <SignOutButton />
-    </div>
+    <main>
+      <Navbar />
+    </main>
   );
 }
