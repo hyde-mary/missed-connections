@@ -1,6 +1,6 @@
 "use client";
 import { Input } from "@/components/ui/input";
-import { ArrowRight, MapPin, Plus, Search } from "lucide-react";
+import { ArrowRight, MapPin, Search } from "lucide-react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 
