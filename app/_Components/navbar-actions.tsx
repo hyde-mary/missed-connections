@@ -13,6 +13,8 @@ import { Button } from "@/components/ui/button";
 import { ChevronDown, Settings, LogOut, Bell, Mail } from "lucide-react";
 import Image from "next/image";
 import { motion } from "framer-motion";
+import { Plus } from "lucide-react";
+import Link from "next/link";
 
 const NavbarActions = () => {
   const { user } = useUser();
@@ -22,6 +24,18 @@ const NavbarActions = () => {
 
   return (
     <div className="flex items-center gap-2 sm:gap-4">
+      <motion.div
+        whileHover={{ scale: 1.05 }}
+        transition={{ type: "spring", stiffness: 300 }}
+      >
+        <Link href="/create">
+          <Button className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white rounded-full h-9 sm:h-10 px-3 sm:px-4 gap-1">
+            <Plus className="h-4 w-4 sm:h-5 sm:w-5" />
+            <span className="hidden sm:inline">Create</span>
+          </Button>
+        </Link>
+      </motion.div>
+
       {/* Notifications */}
       <DropdownMenu>
         <DropdownMenuTrigger

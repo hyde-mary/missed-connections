@@ -1,6 +1,6 @@
 "use client";
 import { Input } from "@/components/ui/input";
-import { ArrowRight, Search } from "lucide-react";
+import { ArrowRight, MapPin, Plus, Search } from "lucide-react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 
@@ -53,7 +53,6 @@ const MainContent = () => {
           <p className="text-gray-600 text-base sm:text-lg md:text-xl">
             Rediscover meaningful encounters and lost connections
           </p>
-
           <div className="relative w-full max-w-lg mx-auto">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
             <Input
@@ -68,7 +67,15 @@ const MainContent = () => {
             <h2 className="text-xl sm:text-2xl font-semibold text-gray-800 mb-4">
               Recent Posts
             </h2>
-            <ArrowRight className="mb-4 ml-2 h-5 w-5 sm:h-6 sm:w-6" />
+            <Link
+              href="/explore"
+              className="flex items-center justify-center hover:cursor-pointer text-blue-400 pb-4"
+            >
+              <span className="flex items-center border-b border-transparent hover:border-blue-400">
+                <p className="">View All</p>
+                <ArrowRight className=" ml-2 h-5 w-5 sm:h-6 sm:w-6" />
+              </span>
+            </Link>
           </div>
 
           <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
@@ -94,8 +101,10 @@ const MainContent = () => {
                 <p className="text-sm sm:text-base text-gray-600 line-clamp-2">
                   {post.excerpt}
                 </p>
-                <p className="mt-1 sm:mt-2 text-xs sm:text-sm underline font-light">
-                  {post.location}
+                <p className="mt-1 sm:mt-2 text-xs sm:text-sm font-light">
+                  <span className="text-sm text-gray-500 flex items-center">
+                    <MapPin className="h-4 w-4 mr-1" /> {post.location}
+                  </span>
                 </p>
                 <Link
                   href="#"
