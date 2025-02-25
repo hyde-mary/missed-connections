@@ -10,7 +10,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { ChevronDown, Settings, LogOut, Bell, Mail } from "lucide-react";
+import { ChevronDown, Settings, LogOut, Bell, Mail, Globe } from "lucide-react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { Plus } from "lucide-react";
@@ -29,9 +29,21 @@ const NavbarActions = () => {
         transition={{ type: "spring", stiffness: 300 }}
       >
         <Link href="/submit">
-          <Button className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white rounded-full h-9 sm:h-10 px-3 sm:px-4 gap-1">
+          <Button className="bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white rounded-full h-9 sm:h-10 px-3 sm:px-4 gap-1">
             <Plus className="h-4 w-4 sm:h-5 sm:w-5" />
             <span className="hidden sm:inline">Create</span>
+          </Button>
+        </Link>
+      </motion.div>
+
+      <motion.div
+        whileHover={{ scale: 1.05 }}
+        transition={{ type: "spring", stiffness: 300 }}
+      >
+        <Link href="/explore">
+          <Button className="bg-gradient-to-r from-pink-500 to-blue-500 hover:from-pink-600 hover:to-blue-600 text-white rounded-full h-9 sm:h-10 px-3 sm:px-4 gap-1">
+            <Globe className="h-4 w-4 sm:h-5 sm:w-5" />
+            <span className="hidden sm:inline">Explore</span>
           </Button>
         </Link>
       </motion.div>
