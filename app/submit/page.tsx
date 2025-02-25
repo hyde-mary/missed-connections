@@ -2,7 +2,6 @@
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
@@ -11,15 +10,35 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { Calendar, Lock } from "lucide-react";
-import { useState } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { storySchema } from "@/lib/schemas/storySchema";
 
 const Page = () => {
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
-  const [location, setLocation] = useState("");
-  const [date, setDate] = useState(new Date().toISOString().split("T")[0]);
-  const [category, setCategory] = useState("");
+  const form = useForm<z.infer<typeof storySchema>>({
+    resolver: zodResolver(storySchema),
+    defaultValues: {
+      title: "",
+      content: "",
+      location: "",
+      date: new Date(),
+      category: undefined,
+    },
+  });
+
+  function onSubmit(values: z.infer<typeof storySchema>) {
+    console.log(values);
+  }
 
   return (
     <motion.div
@@ -37,101 +56,134 @@ const Page = () => {
           Share Your Missed Connection
         </motion.h1>
 
-        <form className="space-y-6">
-          {/* Title Input */}
-          <div className="space-y-2">
-            <Label htmlFor="title" className="text-gray-700">
-              Encounter Title
-            </Label>
-            <Input
-              id="title"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              placeholder="e.g., 'Coffee Shop Smile' or 'Subway Book Reader'"
-              className="rounded-lg h-12 text-base"
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            {/* Title Input */}
+            <FormField
+              control={form.control}
+              name="title"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Encounter Title</FormLabel>
+                  <FormControl>
+                    <Input
+                      className="rounded-lg h-12"
+                      placeholder="e.g., 'Coffee Shop Smile'"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
-          </div>
 
-          {/* Story Textarea */}
-          <div className="space-y-2">
-            <Label htmlFor="story" className="text-gray-700">
-              Your Story
-            </Label>
-            <Textarea
-              id="story"
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
-              placeholder="Describe your encounter in detail..."
-              className="rounded-lg min-h-[150px] max-h-[300px] overflow-y-auto text-base"
+            {/* Story Input */}
+            <FormField
+              control={form.control}
+              name="content"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Your Story</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      placeholder="Describe your encounter in detail..."
+                      className="rounded-lg min-h-[150px]"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
-          </div>
 
-          {/* Location & Date Inputs */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-            <div className="space-y-2">
-              <Label htmlFor="location" className="text-gray-700">
-                Location
-              </Label>
-              <Input
-                id="location"
-                value={location}
-                onChange={(e) => setLocation(e.target.value)}
-                placeholder="e.g., Central Park, Starbucks Downtown"
-                className="rounded-lg h-12"
+            {/* Location & Date */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              <FormField
+                control={form.control}
+                name="location"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Location</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="e.g., Central Park"
+                        className="rounded-lg h-12"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="date"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Approximate Date</FormLabel>
+                    <FormControl>
+                      <div className="relative">
+                        <Input
+                          type="date"
+                          className="rounded-lg h-12 pl-10"
+                          value={field.value.toISOString().split("T")[0]}
+                          onChange={(e) =>
+                            field.onChange(new Date(e.target.value))
+                          }
+                        />
+                        <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+                      </div>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="date" className="text-gray-700">
-                Approximate Date
-              </Label>
-              <div className="relative">
-                <Input
-                  type="date"
-                  id="date"
-                  value={date}
-                  onChange={(e) => setDate(e.target.value)}
-                  className="rounded-lg h-12 pl-10"
-                />
-                <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
-              </div>
-            </div>
-          </div>
 
-          {/* Category Selection */}
-          <div className="space-y-2">
-            <Label htmlFor="category" className="text-gray-700">
-              Connection Type
-            </Label>
-            <Select value={category} onValueChange={setCategory}>
-              <SelectTrigger className="rounded-lg h-12">
-                <SelectValue placeholder="Select a category" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="romantic">Romantic</SelectItem>
-                <SelectItem value="friendship">Friendship</SelectItem>
-                <SelectItem value="miscellaneous">Miscellaneous</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
+            {/* Category Select */}
+            <FormField
+              control={form.control}
+              name="category"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Connection Type</FormLabel>
+                  <Select onValueChange={field.onChange} value={field.value}>
+                    <FormControl>
+                      <SelectTrigger className="rounded-lg h-12">
+                        <SelectValue placeholder="Select a category" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="Romantic">Romantic</SelectItem>
+                      <SelectItem value="Friendship">Friendship</SelectItem>
+                      <SelectItem value="Miscellaneous">
+                        Miscellaneous
+                      </SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-          {/* Submit Button */}
-          <motion.div
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            className="pt-4"
-          >
-            <Button
-              type="submit"
-              className="w-full h-12 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-lg font-semibold rounded-lg"
+            <motion.div
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              className="pt-4"
             >
-              Share Your Story
-            </Button>
-          </motion.div>
-        </form>
+              <Button
+                type="submit"
+                className="w-full h-12 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-lg font-semibold rounded-lg"
+              >
+                Share Your Story
+              </Button>
+            </motion.div>
+          </form>
+        </Form>
 
-        <div className="flex items-center justify-center space-x-2">
-          <Lock className="h-4 w-4 mt-6" />
-          <p className="text-sm text-gray-500 mt-6 text-center">
+        <div className="flex items-center justify-center space-x-2 mt-6">
+          <Lock className="h-4 w-4 text-gray-500" />
+          <p className="text-sm text-gray-500 text-center">
             All submissions are anonymous. Please be respectful and truthful in
             your account.
           </p>
