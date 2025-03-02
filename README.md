@@ -1,17 +1,12 @@
 # 📌 Missed Connection
 
----
-
 **Missed Connection** is a web application inspired by the "Missed Connections" section on Craigslist. It allows users to post and browse anonymous messages about fleeting encounters and lost opportunities to connect with someone they met in passing.
-
----
 
 ## ✨ Current Features
 
 - 🔐 **User Authentication**: Authentication.
 - 🎨 **User Interface (UI)**: Design for core pages.
 
----
 
 ## 🛠 Tech Stack
 
@@ -22,7 +17,6 @@
 - **Styling**: Tailwind CSS / ShadcnUI
 - **Hosting**: <ins>To be decided</ins>
 
----
 
 ## 🚀 Installation
 
@@ -57,7 +51,6 @@ npm run dev
 
 5. Open `http://localhost:3000` in your browser.
 
----
 
 ## 🔮 Intended Features / To-Do List
 
@@ -65,10 +58,8 @@ npm run dev
 - 📝 Create Posts Functionality: Allow users to submit descriptions of missed encounters.
 - 🔍 Filter Posts: Implement search and filter functionality for better browsing.
 
----
 
 ## 🤝 Contributing
 
 Feel free to submit pull requests or report issues!
 
----
