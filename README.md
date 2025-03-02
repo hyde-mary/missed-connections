@@ -30,7 +30,7 @@ cd missed-connection
 2. Install dependencies:
 
 ```sh
-npm install
+npm install --legacy-peer-deps
 ```
 
 3. Set up environment variables in a .env.local file:
