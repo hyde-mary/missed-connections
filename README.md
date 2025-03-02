@@ -1,36 +1,74 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 📌 Missed Connection
 
-## Getting Started
+---
 
-First, run the development server:
+**Missed Connection** is a web application inspired by the "Missed Connections" section on Craigslist. It allows users to post and browse anonymous messages about fleeting encounters and lost opportunities to connect with someone they met in passing.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+---
+
+## ✨ Current Features
+
+- 🔐 **User Authentication**: Authentication.
+- 🎨 **User Interface (UI)**: Design for core pages.
+
+---
+
+## 🛠 Tech Stack
+
+- **Frontend**: Next.js (React)
+- **Backend**: Next.js API Routes
+- **Database**: <ins>To be decided</ins> (Probably: PostgreSQL with Prisma as the ORM)
+- **Authentication**: Clerk's Custom Flow
+- **Styling**: Tailwind CSS / ShadcnUI
+- **Hosting**: <ins>To be decided</ins>
+
+---
+
+## 🚀 Installation
+
+1. Clone the repository:
+
+```sh
+git clone https://github.com/hyde-mary/missed-connection.git
+cd missed-connection
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Install dependencies:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```sh
+npm install
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+3. Set up environment variables in a .env.local file:
 
-## Learn More
+```.env.local
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=YOUR_CLERK_PUBLISHABLE_KEY
+CLERK_SECRET_KEY=YOUR_CLERK_SECRET_KEY
 
-To learn more about Next.js, take a look at the following resources:
+NEXT_PUBLIC_CLERK_SIGN_IN_URL=/sign-in
+NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+4. Run the development server:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```sh
+npm run dev
+```
 
-## Deploy on Vercel
+5. Open `http://localhost:3000` in your browser.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 🔮 Intended Features / To-Do List
+
+- 🗄 Connect Database: Integrate a database for storing posts.
+- 📝 Create Posts Functionality: Allow users to submit descriptions of missed encounters.
+- 🔍 Filter Posts: Implement search and filter functionality for better browsing.
+
+---
+
+## 🤝 Contributing
+
+Feel free to submit pull requests or report issues!
+
+---
