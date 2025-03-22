@@ -23,8 +23,16 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { storySchema } from "@/lib/schemas/storySchema";
+import { useState } from "react";
+import { createPost } from "@/app/(server)/actions/post";
+import { useUser } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
 
 const Page = () => {
+  const [loading, setLoading] = useState(false);
+  const { user } = useUser();
+  const router = useRouter();
+
   const form = useForm<z.infer<typeof storySchema>>({
     resolver: zodResolver(storySchema),
     defaultValues: {
@@ -36,9 +44,35 @@ const Page = () => {
     },
   });
 
-  function onSubmit(values: z.infer<typeof storySchema>) {
-    console.log(values);
+  async function onSubmit(values: z.infer<typeof storySchema>) {
+    setLoading(true);
+
+    try {
+      if (!user) {
+        console.error("Error: User is not authenticated.");
+        return;
+      }
+
+      const response = await createPost(user.id, values);
+
+      if (!response.success) {
+        console.error(
+          "Post Creation Failed:",
+          response.error || "Unknown error."
+        );
+        return;
+      }
+
+      console.log("Post Created Successfully!");
+      router.replace("/explore");
+    } catch (error) {
+      console.error("Unexpected Error:", error);
+    } finally {
+      setLoading(false);
+    }
   }
+
+  if (!user) return;
 
   return (
     <motion.div
@@ -174,8 +208,9 @@ const Page = () => {
               <Button
                 type="submit"
                 className="w-full h-12 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-lg font-semibold rounded-lg"
+                disabled={loading}
               >
-                Share Your Story
+                {loading ? "Sharing your story..." : "Share Your Story"}
               </Button>
             </motion.div>
           </form>

@@ -1,7 +1,7 @@
 "use client";
 import { motion } from "framer-motion";
-import Sidebar from "./_Components/sidebar";
-import PostCard from "./_Components/post-card";
+import Sidebar from "./_components/sidebar";
+import PostCard from "./_components/post-card";
 
 const Page = () => {
   const allPosts = [
