@@ -32,7 +32,7 @@ const SignUpForm = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const signInForm = useForm<z.infer<typeof signUpSchema>>({
+  const signUpForm = useForm<z.infer<typeof signUpSchema>>({
     resolver: zodResolver(signUpSchema),
     defaultValues: {
       username: "",
@@ -58,7 +58,7 @@ const SignUpForm = () => {
     setError("");
 
     try {
-      await signUp.create({
+      const user = await signUp.create({
         username: values.username,
         emailAddress: values.email,
         password: values.password,
@@ -71,6 +71,8 @@ const SignUpForm = () => {
       toast.success("Verification Code Sent to your Email.");
 
       setVerifying(true);
+
+      console.log(user);
     } catch {
       toast.error("An Error Occurred during Registration");
     }
@@ -191,14 +193,14 @@ const SignUpForm = () => {
 
       {error && <p className="text-red-500 text-sm text-center">{error}</p>}
 
-      <Form {...signInForm}>
+      <Form {...signUpForm}>
         <form
-          onSubmit={signInForm.handleSubmit(onSubmit)}
+          onSubmit={signUpForm.handleSubmit(onSubmit)}
           className="space-y-6"
         >
           {/* Username */}
           <FormField
-            control={signInForm.control}
+            control={signUpForm.control}
             name="username"
             render={({ field }) => (
               <FormItem>
@@ -216,7 +218,7 @@ const SignUpForm = () => {
 
           {/* Email */}
           <FormField
-            control={signInForm.control}
+            control={signUpForm.control}
             name="email"
             render={({ field }) => (
               <FormItem>
@@ -235,7 +237,7 @@ const SignUpForm = () => {
 
           {/* Password */}
           <FormField
-            control={signInForm.control}
+            control={signUpForm.control}
             name="password"
             render={({ field }) => (
               <FormItem>
@@ -268,7 +270,7 @@ const SignUpForm = () => {
 
           {/* Confirm Password */}
           <FormField
-            control={signInForm.control}
+            control={signUpForm.control}
             name="confirmPassword"
             render={({ field }) => (
               <FormItem>
@@ -303,7 +305,7 @@ const SignUpForm = () => {
 
           {/* Terms Agreement */}
           <FormField
-            control={signInForm.control}
+            control={signUpForm.control}
             name="terms"
             render={({ field }) => (
               <FormItem>
