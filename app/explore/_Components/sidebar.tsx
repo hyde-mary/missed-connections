@@ -40,8 +40,8 @@ const Sidebar = () => {
   return (
     <div className="w-full max-w-[320px] min-h-screen pt-[64px] border-r-2 border-gray-200 sticky top-0 h-screen overflow-y-auto px-6">
       <div className="flex flex-col items-start mt-4 space-y-2">
-        <h1 className="text-2xl font-semibold">Welcome!</h1>
-        <p className="text-sm text-gray-700 text-justify">
+        <h1 className="text-2xl font-semibold">Filter:</h1>
+        <p className="text-sm text-muted-foreground text-justify">
           Customize your search effortlessly! Use the search bar to enter
           keywords and refine your results with multiple tags. Let our smart
           filtering do the rest.
@@ -78,7 +78,7 @@ const Sidebar = () => {
               onClick={() => {
                 setQuickCategory(category);
               }}
-              className={`text-sm px-3 py-1.5 rounded-full transition-colors ${
+              className={`text-sm px-3 py-1.5 rounded-full transition-colors border ${
                 quickCategory === category
                   ? "bg-purple-600 text-white"
                   : "bg-gray-100 hover:bg-gray-200"
