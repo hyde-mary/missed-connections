@@ -3,7 +3,7 @@ import { Roboto } from "next/font/google";
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Toaster } from "@/components/ui/sonner";
-import Navbar from "./_Components/navbar";
+import Navbar from "./_components/navbar";
 
 const roboto = Roboto({
   weight: ["100", "300", "400", "500", "700", "900"],

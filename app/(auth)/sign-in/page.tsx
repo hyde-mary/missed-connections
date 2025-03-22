@@ -1,5 +1,5 @@
 import React from "react";
-import SignInForm from "../_Components/sign-in-form";
+import SignInForm from "../_components/sign-in-form";
 
 const Page = () => {
   return (
